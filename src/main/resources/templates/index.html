@@ -1,36 +1,91 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
-                integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
-                crossorigin="anonymous"
-                referrerpolicy="no-referrer">
-        </script>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+            integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer">
+    </script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.6/underscore-min.js"
-                integrity="sha512-2V49R8ndaagCOnwmj8QnbT1Gz/rie17UouD9Re5WxbzRVUGoftCu5IuqqtAM9+UC3fwfHCSJR1hkzNQh/2wdtg=="
-                crossorigin="anonymous"
-                referrerpolicy="no-referrer">
-        </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.6/underscore-min.js"
+            integrity="sha512-2V49R8ndaagCOnwmj8QnbT1Gz/rie17UouD9Re5WxbzRVUGoftCu5IuqqtAM9+UC3fwfHCSJR1hkzNQh/2wdtg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer">
+    </script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.1/backbone-min.js"
-                integrity="sha512-TztyCWDNoN0YKl30gDCMKsiWs35juID+W7ZM2uvPeLLmiNvZg789SglgB/QeUbewqIF2Z4mVq3PyIEa+YXXADQ=="
-                crossorigin="anonymous"
-                referrerpolicy="no-referrer">
-        </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.1/backbone-min.js"
+            integrity="sha512-TztyCWDNoN0YKl30gDCMKsiWs35juID+W7ZM2uvPeLLmiNvZg789SglgB/QeUbewqIF2Z4mVq3PyIEa+YXXADQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer">
+    </script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"
-                integrity="sha512-Xo0Jh8MsOn72LGV8kU5LsclG7SUzJsWGhXbWcYs2MAmChkQzwiW/yTQwdJ8w6UA9C6EVG18GHb/TrYpYCjyAQw=="
-                crossorigin="anonymous"
-                referrerpolicy="no-referrer">
-        </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"
+            integrity="sha512-Xo0Jh8MsOn72LGV8kU5LsclG7SUzJsWGhXbWcYs2MAmChkQzwiW/yTQwdJ8w6UA9C6EVG18GHb/TrYpYCjyAQw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer">
+    </script>
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css"
-              integrity="sha512-KXol4x3sVoO+8ZsWPFI/r5KBVB/ssCGB5tsv2nVOKwLg33wTFP3fmnXa47FdSVIshVTgsYk/1734xSk9aFIa4A=="
-              crossorigin="anonymous"
-              referrerpolicy="no-referrer" />
-    </head>
-    <body>
-
-    </body>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css"
+          integrity="sha512-KXol4x3sVoO+8ZsWPFI/r5KBVB/ssCGB5tsv2nVOKwLg33wTFP3fmnXa47FdSVIshVTgsYk/1734xSk9aFIa4A=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"/>
+</head>
+<body>
+<div class="ui grid">
+    <div class="row">
+        <div class="three wide column">
+            <img>
+        </div>
+        <div class="ten wide column">
+            <p></p>
+        </div>
+        <div class="three wide column">
+            <img>
+        </div>
+    </div>
+    <div class="row">
+        <div class="three wide column">
+            <img>
+        </div>
+        <div class="ten wide column">
+            <div class="ui two column centered grid">
+                <div class="column" style="background-color: yellow;">
+                    <div class="ui action labeled input">
+                        <div class="ui label">
+                            wss://
+                        </div>
+                        <button class="ui button">Connect</button>
+                        <div class="ui label">
+                            host:
+                        </div>
+                        <input type="text" placeholder="Please enter ASNeG host">
+                        <div class="ui label">
+                            port:
+                        </div>
+                        <input type="text" placeholder="Please enter ASNeG port">
+                    </div>
+                </div>
+                <div class="four column centered row" style="background-color: red;">
+                    <div class="column"></div>
+                    <div class="column"></div>
+                </div>
+            </div>
+        </div>
+        <div class="three wide column">
+            <img>
+        </div>
+    </div>
+    <div class="row">
+        <div class="three wide column">
+            <img>
+        </div>
+        <div class="ten wide column">
+            <p></p>
+        </div>
+        <div class="three wide column">
+            <img>
+        </div>
+    </div>
+</div>
+</body>
 </html>

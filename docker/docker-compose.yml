@@ -33,7 +33,9 @@ services:
     environment:
       - SERVER_PKI_ROOT_DIR=/tmp/
       - SSH_AUTH_SOCK=/ssh-agent
-    build: ../OpcUaWebServer
+    build:
+      context: ../OpcUaWebServer
+      dockerfile: ./OpcUaWebServer.Dockerfile
     volumes:
       - web_server_pki:/etc/OpcUaStack/OpcUaWebServer/pki
       - .:/code
@@ -45,7 +47,9 @@ services:
 
   test_client:
     container_name: test_client${BUILD_TAG}
-    build: ../OpcUaWebServer
+    build:
+      context: ../OpcUaWebServer
+      dockerfile: ./OpcUaWebServer.Dockerfile
     depends_on:
       - asneg-demo
       - webserver
@@ -62,6 +66,15 @@ services:
       - web_server_pki:/tmp/etc/OpcUaStack/OpcUaWebServer/pki
       - demo_server_pki:/tmp/etc/OpcUaStack/ASNeG-Demo/pki
       - .:/code
+
+  #spring-opc-ua-client:
+  #  container_name: spring-opc-ua-client${BUILD_TAG}
+  #  build:
+  #    context: .
+  #    dockerfile: ./OpcUaSpringClient.Dockerfile
+  #  depends_on:
+  #   - asneg_demo
+  #   - webserver
 
 volumes:
   demo_server_pki:

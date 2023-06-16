@@ -1,6 +1,5 @@
-package dev.projects.profsouz.springjavaopcuaclient;
+package dev.projects.profsouz.opcuaclient;
 
-import dev.projects.profsouz.opcuaclient.SpringJavaOpcUaClientApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.TestConfiguration;
 

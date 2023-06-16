@@ -1,4 +1,4 @@
-package dev.projects.profsouz.springjavaopcuaclient;
+package dev.projects.profsouz.opcuaclient;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

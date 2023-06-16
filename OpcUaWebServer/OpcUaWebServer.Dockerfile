@@ -6,7 +6,7 @@ WORKDIR /home/OpcUaWebServer
 COPY / ./
 
 # Prepare Python dependencies for tests
-RUN apt-get update && apt-get install -y python3-pip && apt-get install nano
+RUN apt-get update && apt-get install -y python3-pip && apt-get install vim
 RUN pip3 install -r ./ftest/requirements.txt
 
 # Prepare workdir

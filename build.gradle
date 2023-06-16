@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'dev.projects.profsouz'
-version = '0.0.1-SNAPSHOT'
+version = '0.1'
 
 java {
 	sourceCompatibility = '17'
@@ -21,11 +21,9 @@ repositories {
 	mavenCentral()
 }
 
-ext {
-	set('springShellVersion', "3.1.1")
-}
-
 def thymeleafLayoutDialectVersion = '3.2.1'
+def junitJupiterApiVersion = '5.9.3'
+def springShellVersion = '3.1.1'
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -39,7 +37,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+	/*developmentOnly 'org.springframework.boot:spring-boot-docker-compose'*/
 
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -47,6 +45,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
 	testImplementation 'org.testcontainers:junit-jupiter'
+
+	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+	testImplementation "org.junit.jupiter:junit-jupiter-api:${junitJupiterApiVersion}"
 }
 
 dependencyManagement {
