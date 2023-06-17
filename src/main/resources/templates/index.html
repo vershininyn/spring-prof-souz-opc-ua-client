@@ -51,103 +51,119 @@
     <script src="../static/js/index.js"></script>
 </head>
 <body>
-<div class="ui grid">
-    <div class="row">
-        <div class="five wide column">
-            <img>
+<div class="ui two column centered aligned grid">
+    <div class="column">
+        <div class="ui basic segment">
+            <div class="ui large label">
+                wss://
+            </div>
+            <div class="ui large label">
+                host:
+            </div>
+            <div class="ui small input">
+                <input type="text" placeholder="Please enter ASNeG host...">
+            </div>
+            <div class="ui large label">
+                port:
+            </div>
+            <div class="ui small input">
+                <input type="text" placeholder="Please enter ASNeG port...">
+            </div>
+            <button class="small green ui labeled icon button" id="connect-button">
+                <!--<i class="loading spinner icon"></i>-->
+                Connect
+            </button>
         </div>
-        <div class="six wide column" style="margin-top: 15rem;">
-            <div class="ui grid">
-                <div class="row">
-                    <div class="column">
-                        <div class="ui action labeled input focus" style="margin-left: -1rem;">
-                            <div class="ui label">
-                                wss://
-                            </div>
-                            <div class="ui label">
-                                host:
-                            </div>
-                            <input type="text" placeholder="Please enter ASNeG host">
-                            <div class="ui label">
-                                port:
-                            </div>
-                            <input type="text" placeholder="Please enter ASNeG port">
-                            <button class="ui button">Connect</button>
+    </div>
+    <div class="four column centered row">
+        <div class="ui basic segment">
+            <div class="ui two column stackable center aligned grid">
+                <div class="ui vertical divider"></div>
+                <div class="middle aligned row">
+                    <div class="eight wide column">
+                        <h3 class="ui center aligned header">
+                            Download selected tag's
+                        </h3>
+                        <div class="container">
+                            <table id="tree-table" class="table table-hover table-bordered">
+                                <tbody>
+                                <th>#</th>
+                                <th>Value</th>
+                                <tr data-id="1" data-parent="0" data-level="1">
+                                    <td data-column="name">Node 1</td>
+                                    <td>Value0</td>
+                                </tr>
+                                <tr data-id="2" data-parent="1" data-level="2">
+                                    <td data-column="name">Node 1</td>
+                                    <td>Additional info</td>
+                                </tr>
+                                <tr data-id="3" data-parent="1" data-level="2">
+                                    <td data-column="name">Node 1</td>
+                                    <td>Additional info</td>
+                                </tr>
+                                <tr data-id="4" data-parent="3" data-level="3">
+                                    <td data-column="name">Node 1</td>
+                                    <td>Additional info</td>
+                                </tr>
+                                <tr data-id="5" data-parent="3" data-level="3">
+                                    <td data-column="name">Node 1</td>
+                                    <td>Additional info</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
+                        <button class="right floated small green ui labeled icon button">
+                            <!--<i class="loading spinner icon"></i>-->
+                            Download
+                        </button>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="ui ten wide grid">
-                        <div class="row">
-                            <div class="eight wide column">
-                                <div class="container">
-                                    <table id="tree-table" class="table table-hover table-bordered">
-                                        <tbody>
-                                        <th>#</th>
-                                        <th>Test</th>
-                                        <tr data-id="1" data-parent="0" data-level="1">
-                                            <td data-column="name">Node 1</td>
-                                            <td>Additional info</td>
-                                        </tr>
-                                        <tr data-id="2" data-parent="1" data-level="2">
-                                            <td data-column="name">Node 1</td>
-                                            <td>Additional info</td>
-                                        </tr>
-                                        <tr data-id="3" data-parent="1" data-level="2">
-                                            <td data-column="name">Node 1</td>
-                                            <td>Additional info</td>
-                                        </tr>
-                                        <tr data-id="4" data-parent="3" data-level="3">
-                                            <td data-column="name">Node 1</td>
-                                            <td>Additional info</td>
-                                        </tr>
-                                        <tr data-id="5" data-parent="3" data-level="3">
-                                            <td data-column="name">Node 1</td>
-                                            <td>Additional info</td>
-                                        </tr>
-                                        </tbody>
-
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="eight wide column">
-                                <div class="container">
-                                    <table id="tree-table" class="table table-hover table-bordered">
-                                        <tbody>
-                                        <th>#</th>
-                                        <th>Test</th>
-                                        <tr data-id="1" data-parent="0" data-level="1">
-                                            <td data-column="name">Node 1</td>
-                                            <td>Additional info</td>
-                                        </tr>
-                                        <tr data-id="2" data-parent="1" data-level="2">
-                                            <td data-column="name">Node 1</td>
-                                            <td>Additional info</td>
-                                        </tr>
-                                        <tr data-id="3" data-parent="1" data-level="2">
-                                            <td data-column="name">Node 1</td>
-                                            <td>Additional info</td>
-                                        </tr>
-                                        <tr data-id="4" data-parent="3" data-level="3">
-                                            <td data-column="name">Node 1</td>
-                                            <td>Additional info</td>
-                                        </tr>
-                                        <tr data-id="5" data-parent="3" data-level="3">
-                                            <td data-column="name">Node 1</td>
-                                            <td>Additional info</td>
-                                        </tr>
-                                        </tbody>
-
-                                    </table>
-                                </div>
-                            </div>
+                    <div class="eight wide column">
+                        <h3 class="ui center aligned header">
+                            Subscribe to selected tags or change the tag's value
+                        </h3>
+                        <div class="container">
+                            <table id="tree-table" class="table table-hover table-bordered">
+                                <tbody>
+                                <th>#</th>
+                                <th>Value</th>
+                                <tr data-id="1" data-parent="0" data-level="1">
+                                    <td data-column="name">Node 1</td>
+                                    <td>
+                                        <div class="ui fluid input">
+                                            <input type="text" placeholder="Enter value...">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr data-id="2" data-parent="1" data-level="2">
+                                    <td data-column="name">Node 1</td>
+                                    <td>Additional info</td>
+                                </tr>
+                                <tr data-id="3" data-parent="1" data-level="2">
+                                    <td data-column="name">Node 1</td>
+                                    <td>Additional info</td>
+                                </tr>
+                                <tr data-id="4" data-parent="3" data-level="3">
+                                    <td data-column="name">Node 1</td>
+                                    <td>Additional info</td>
+                                </tr>
+                                <tr data-id="5" data-parent="3" data-level="3">
+                                    <td data-column="name">Node 1</td>
+                                    <td>Additional info</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
+                        <button class="ui small icon labeled green left attached left floated button">
+                            <!--<i class="loading spinner icon"></i>-->
+                            Subscribe
+                        </button>
+                        <button class="ui small icon labeled green right attached left floated button">
+                            <!--<i class="loading spinner icon"></i>-->
+                            Upload values
+                        </button>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="five wide column">
-            <img>
         </div>
     </div>
 </div>
