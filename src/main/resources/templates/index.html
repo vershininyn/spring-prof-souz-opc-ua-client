@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -34,12 +34,15 @@
             crossorigin="anonymous"
             referrerpolicy="no-referrer"></script>
 
+
+    <script th:src="@{/js/index.js}"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css"
           integrity="sha512-KXol4x3sVoO+8ZsWPFI/r5KBVB/ssCGB5tsv2nVOKwLg33wTFP3fmnXa47FdSVIshVTgsYk/1734xSk9aFIa4A=="
           crossorigin="anonymous"
           referrerpolicy="no-referrer"/>
 
-    <link rel="stylesheet" href="../static/css/index.css">
+    <link rel="stylesheet" href="../static/index.css" th:href="@{/css/index.css}">
 
     <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
 
@@ -47,8 +50,6 @@
           integrity="sha512-t4GWSVZO1eC8BM339Xd7Uphw5s17a86tIZIj8qRxhnKub6WoyhnrxeCIMeAqBPgdZGlCcG2PrZjMc+Wr78+5Xg=="
           crossorigin="anonymous"
           referrerpolicy="no-referrer"/>
-
-    <script src="../static/js/index.js"></script>
 </head>
 <body>
 <div class="ui two column centered aligned grid">
@@ -66,7 +67,7 @@
             <div class="ui large label">
                 port:
             </div>
-            <div class="ui small input">
+            <div class="ui small input asneg-port">
                 <input type="text" placeholder="Please enter ASNeG port...">
             </div>
             <button class="small green ui labeled icon button" id="connect-button">
@@ -123,33 +124,11 @@
                         </h3>
                         <div class="container">
                             <table id="tree-table" class="table table-hover table-bordered">
-                                <tbody>
+                                <thead>
                                 <th>#</th>
                                 <th>Value</th>
-                                <tr data-id="1" data-parent="0" data-level="1">
-                                    <td data-column="name">Node 1</td>
-                                    <td>
-                                        <div class="ui fluid input">
-                                            <input type="text" placeholder="Enter value...">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr data-id="2" data-parent="1" data-level="2">
-                                    <td data-column="name">Node 1</td>
-                                    <td>Additional info</td>
-                                </tr>
-                                <tr data-id="3" data-parent="1" data-level="2">
-                                    <td data-column="name">Node 1</td>
-                                    <td>Additional info</td>
-                                </tr>
-                                <tr data-id="4" data-parent="3" data-level="3">
-                                    <td data-column="name">Node 1</td>
-                                    <td>Additional info</td>
-                                </tr>
-                                <tr data-id="5" data-parent="3" data-level="3">
-                                    <td data-column="name">Node 1</td>
-                                    <td>Additional info</td>
-                                </tr>
+                                </thead>
+                                <tbody>
                                 </tbody>
                             </table>
                         </div>
@@ -167,5 +146,33 @@
         </div>
     </div>
 </div>
+
+<div id="node-body-template" style="display: none;">
+    <tr data-id="" data-parent="" data-level="">
+        <td data-column="name"></td>
+        <td>
+            <div class="ui fluid input">
+                <input type="text" placeholder="Enter value..." value="">
+            </div>
+        </td>
+    </tr>
+</div>
+
+<div class="ui modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Connection status
+    </div>
+    <div class="content" id="verify-host-and-port">
+
+    </div>
+    <div class="actions">
+        <div class="ui approve green right labeled icon button">
+            Close
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

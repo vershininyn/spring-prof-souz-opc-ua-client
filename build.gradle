@@ -24,6 +24,7 @@ repositories {
 def thymeleafLayoutDialectVersion = '3.2.1'
 def junitJupiterApiVersion = '5.9.3'
 def springShellVersion = '3.1.1'
+def springThymeleafVersion = '3.1.1.RELEASE'
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -34,10 +35,15 @@ dependencies {
 	// https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect
 	implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:${thymeleafLayoutDialectVersion}"
 
+	compileOnly "org.thymeleaf:thymeleaf:${springThymeleafVersion}"
+
+	// https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf-spring6
+	compileOnly "org.thymeleaf:thymeleaf-spring6:${springThymeleafVersion}"
+
 	compileOnly 'org.projectlombok:lombok'
 
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	/*developmentOnly 'org.springframework.boot:spring-boot-docker-compose'*/
+	/*developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'*/
 
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
