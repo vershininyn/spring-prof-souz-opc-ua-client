@@ -25,45 +25,36 @@
 
     <script th:src="@{/js/index.js}"></script>
 
+    <!--<script th:src="@{/js/tree-table.js}"></script>-->
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css"
           integrity="sha512-KXol4x3sVoO+8ZsWPFI/r5KBVB/ssCGB5tsv2nVOKwLg33wTFP3fmnXa47FdSVIshVTgsYk/1734xSk9aFIa4A=="
           crossorigin="anonymous"
           referrerpolicy="no-referrer"/>
 
-    <link rel="stylesheet" href="../static/index.css" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
 
-    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/tree-table.css}">
 </head>
 <body>
 <div class="ui two column centered aligned grid">
-    <div class="eleven wide column">
+    <div class="eight wide column">
         <div class="ui basic segment">
             <div class="ui large label">
                 wss://
             </div>
-            <div class="ui large label" id="wss-host">
+            <div class="ui large label">
                 host:
             </div>
             <div class="ui small input">
-                <input type="text" placeholder="Please enter ASNeG host...">
-            </div>
-            <div class="ui large label" id="wss-port">
-                port:
-            </div>
-            <div class="ui small input asneg-port">
-                <input type="text" placeholder="Please enter ASNeG port...">
+                <input type="text" placeholder="Please enter ASNeG host..." id="wss-host">
             </div>
             <div class="ui large label">
-                xml-filepath:
+                port:
             </div>
-            <div class="ui small input disabled">
-                <input type="text" placeholder="Please enter xml filepath..." id="xml-filepath">
+            <div class="ui small input">
+                <input type="text" placeholder="Please enter ASNeG port..." id="wss-port">
             </div>
-            <button class="small green ui labeled icon button" id="choose-file-button">
-                <!--<i class="loading spinner icon"></i>-->
-                <input type="file" (change)="fileEvent($event)" class="inputfile"/>
-                Choose file
-            </button>
             <button class="small green ui labeled icon button" id="connect-button">
                 <!--<i class="loading spinner icon"></i>-->
                 Connect
@@ -80,14 +71,18 @@
                             Download selected tag's
                         </h3>
                         <div class="container">
-                            <table id="download-tree-table" class="table table-hover table-bordered tree-table">
-                                <thead>
-                                <th>#</th>
-                                <th>Value</th>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                            <div class="tree-table-wrap">
+                                <table class="tree-table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="download-table-tree">
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <button class="right floated small green ui labeled icon button">
                             <!--<i class="loading spinner icon"></i>-->
@@ -99,14 +94,18 @@
                             Subscribe to selected tags or change the tag's value
                         </h3>
                         <div class="container">
-                            <table id="upload-tree-table" class="table table-hover table-bordered tree-table">
-                                <thead>
-                                <th>#</th>
-                                <th>Value</th>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                            <div class="upload-tree-table-wrap">
+                                <table class="upload-tree-table">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Value</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="upload-table-tree">
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <button class="ui small icon labeled green left attached left floated button">
                             <!--<i class="loading spinner icon"></i>-->

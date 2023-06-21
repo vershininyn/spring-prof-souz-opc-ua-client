@@ -75,6 +75,8 @@ services:
   #  depends_on:
   #   - asneg_demo
   #   - webserver
+  # environment:
+  #   - xml-filepath: /home/dev/projects/java/spring-prof-souz-opc-ua-client/template.xml
 
 volumes:
   demo_server_pki:
