@@ -20,12 +20,6 @@ const check_port_host_filename = (wssHost, wssPort, xmlFilepath) => {
         return wssPort.match(ipv4_port_regexp) != null;
     }
 
-    const checkXmlFilepath = (xmlFilepath) => {
-        const xml_filepath_regexp = /^.*\.xml$/;
-
-        return xmlFilepath.match(xml_filepath_regexp) != null
-    }
-
     const wssHostIsOk = () => {
         return;
     }
@@ -49,22 +43,9 @@ const check_port_host_filename = (wssHost, wssPort, xmlFilepath) => {
         return;
     }
 
-    const xmlFilepathIsOk = () => {
-        return;
-    }
-
-    const xmlFilepathIsWrong = () => {
-        $('#verify-host-and-port-and-xml').text("Xml filepath is unacceptable. Please check filepath by pattern '*.xml'.");
-        $('.ui.modal').modal({blurring: true}).modal('show');
-
-        return;
-    }
-
     const wssHostEmptyResult = checkWssHost(wssHost) ? wssHostIsOk() : wssHostIsWrong();
 
     const wssPortEmptyResult = checkWssPort(wssPort) ? wssPortIsOk() : wssPortIsWrong();
-
-    const xmlFilepathEmptyResult = checkXmlFilepath(xmlFilepath) ? xmlFilepathIsOk() : xmlFilepathIsWrong();
 
     return;
 }
