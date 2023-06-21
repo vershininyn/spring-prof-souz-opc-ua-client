@@ -1,4 +1,13 @@
-version: '3.8'
+version: '3.9'
+
+networks:
+  opc-ua-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.0.0/24"
+          gateway: "192.168.0.1"
 
 services:
   asneg-demo:
@@ -8,11 +17,11 @@ services:
     expose:
       - "8889"
       - "4840"
-    ports:
-      - "0.0.0.0:8889:8889"
-      - "0.0.0.0:4840:4840"
     volumes:
       - demo_server_pki:/etc/OpcUaStack/ASNeG-Demo/pki
+    networks:
+      opc-ua-network:
+        ipv4_address: 192.168.0.10
 
   webserver:
     container_name: webserver${BUILD_TAG}
@@ -24,12 +33,6 @@ services:
       - "8081"
       - "8082"
       - "22"
-    ports:
-      - "0.0.0.0:8080:8080"
-      - "0.0.0.0:8081:8081"
-      - "0.0.0.0:8082:8082"
-      - "0.0.0.0:8890:8890"
-      - "0.0.0.0:22:22"
     environment:
       - SERVER_PKI_ROOT_DIR=/tmp/
       - SSH_AUTH_SOCK=/ssh-agent
@@ -44,6 +47,9 @@ services:
       && sed -i 's/0.0.0.0:8889/asneg-demo:8889/' /etc/OpcUaStack/OpcUaWebServer/OpcUaClient1.xml 
       && sed -i 's/0.0.0.0:8889/asneg-demo:8889/' /etc/OpcUaStack/OpcUaWebServer/OpcUaClientTest.xml
       && OpcUaServer4 /etc/OpcUaStack/OpcUaWebServer/OpcUaServer.xml"
+    networks:
+      opc-ua-network:
+        ipv4_address: 192.168.0.11
 
   test_client:
     container_name: test_client${BUILD_TAG}
@@ -55,17 +61,20 @@ services:
       - webserver
     environment:
       - SERVER_PKI_ROOT_DIR=/tmp/
-      - WSS_GATEWAY_URL=wss://0.0.0.0:8082
-      - WS_GATEWAY_URL=ws://0.0.0.0:8082
-      - WSS_SERVER_URL=wss://0.0.0.0:8081
-      - WS_SERVER_URL=ws://0.0.0.0:8081
-      - OPC_SERVER_URL=opc.tcp://0.0.0.0:8889
+      - WSS_GATEWAY_URL=wss://192.168.0.11:8082
+      - WS_GATEWAY_URL=ws://192.168.0.11:8082
+      - WSS_SERVER_URL=wss://192.168.0.11:8081
+      - WS_SERVER_URL=ws://192.168.0.11:8081
+      - OPC_SERVER_URL=opc.tcp://192.168.0.11:8889
       - DOCKER_ENABLE=YES
     command: echo "Test client is ready"
     volumes:
       - web_server_pki:/tmp/etc/OpcUaStack/OpcUaWebServer/pki
       - demo_server_pki:/tmp/etc/OpcUaStack/ASNeG-Demo/pki
       - .:/code
+    networks:
+      opc-ua-network:
+        ipv4_address: 192.168.0.12
 
   #spring-opc-ua-client:
   #  container_name: spring-opc-ua-client${BUILD_TAG}
@@ -76,8 +85,14 @@ services:
   #   - asneg_demo
   #   - webserver
   # environment:
-  #   - xml-filepath: /home/dev/projects/java/spring-prof-souz-opc-ua-client/template.xml
+  #   - XML_FILEPATH: /home/dev/projects/java/spring-prof-souz-opc-ua-client/template.xml
+  # networks:
+  #  opc-ua-network:
+  #     ipv4_address: 192.168.0.13
 
 volumes:
   demo_server_pki:
   web_server_pki:
+
+
+
