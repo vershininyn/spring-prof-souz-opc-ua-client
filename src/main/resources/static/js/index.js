@@ -217,6 +217,13 @@ $(() => {
                     $(tdEle1).append(spanEle);
                 }
 
+                var tdEle0 = document.createElement('td');
+                $(tdEle0).css('width', '50px');
+                var spanTd0 = document.createElement('span');
+                $(spanTd0).addClass('tree-table-td-content');
+                $(spanTd0).append("<div class='ui checkbox'><input type='checkbox' name='example'><label>Choose for download</label></div>");
+                $(tdEle0).append(spanTd0);
+
                 var spanEle2 = document.createElement('span');
                 $(spanEle2).addClass('tree-table-td-content');
                 $(spanEle2).text(item.id);
@@ -229,6 +236,7 @@ $(() => {
                 $(spanTd2).text(item.value);
                 $(tdEle2).append(spanTd2);
 
+                $(trEle).append(tdEle0);
                 $(trEle).append(tdEle1);
                 $(trEle).append(tdEle2);
 
