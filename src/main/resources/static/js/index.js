@@ -1,4 +1,4 @@
-const check_port_host_filename = (wssHost, wssPort, xmlFilepath) => {
+const check_port_host = (wssHost, wssPort) => {
     /*
         checkWssHost
         checkWssPort
@@ -77,11 +77,10 @@ var items = [
 
 $(() => {
     $("#connect-button" ).on("click", () => {
-        let xmlFilepath = $('#xml-filepath').val();
         let wssPort = $('#wss-port').val();
         let wssHost = $('#wss-host').val();
 
-        check_port_host_filename(wssHost, wssPort, xmlFilepath);
+        check_port_host(wssHost, wssPort);
     });
 
     function flatListToTree(items) {
@@ -221,7 +220,7 @@ $(() => {
                 $(tdEle0).css('width', '50px');
                 var spanTd0 = document.createElement('span');
                 $(spanTd0).addClass('tree-table-td-content');
-                $(spanTd0).append("<div class='ui checkbox'><input type='checkbox' name='example'><label>Choose for download</label></div>");
+                $(spanTd0).append("<div class='ui checkbox'><input type='checkbox' name='example'><label></label></div>");
                 $(tdEle0).append(spanTd0);
 
                 var spanEle2 = document.createElement('span');
