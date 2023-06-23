@@ -36,7 +36,7 @@
 </head>
 <body>
 <div class="ui two column centered aligned grid">
-    <div class="eight wide column">
+    <div class="eleven wide column">
         <div class="ui basic segment">
             <img class="ui big centered image" th:src="@{/pics/asneg_logo.png}">
             <div class="ui large label">
@@ -54,7 +54,13 @@
             <div class="ui small input">
                 <input type="text" placeholder="Please enter ASNeG port..." id="wss-port">
             </div>
-            <button class="small green ui labeled icon button" id="connect-button">
+            <div class="ui large label">
+                xml-filepath:
+            </div>
+            <div class="ui small input">
+                <input type="text" placeholder="Please enter xml filepath..." id="xml-filepath" style="width: 100mm;">
+            </div>
+            <button class="small green ui labeled icon button" id="connect-disconnect-button" isConnected="false">
                 <!--<i class="loading spinner icon"></i>-->
                 Connect
             </button>

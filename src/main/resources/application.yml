@@ -5,7 +5,7 @@ server:
     context-path: /
 
 opc-ua-spring-client:
-  xml-filepath: ${xml-filepath:/home/dev/projects/java/spring-prof-souz-opc-ua-client/template.xml}
+  #xml-filepath: ${xml-filepath:/home/dev/projects/java/spring-prof-souz-opc-ua-client/template.xml}
   wss-host: ${wss-host:0.0.0.0}
   wss-port: ${wss-port:8080}
 

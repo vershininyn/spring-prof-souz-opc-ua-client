@@ -10,7 +10,7 @@ import java.nio.file.Path;
 
 @Service
 public class OpcUaFileSystemService {
-    @Pattern(regexp = "([a-zA-Z]:)?(\\\\[a-zA-Z0-9_.-]+)+\\\\?",
+    @Pattern(regexp = "([a-zA-Z]:)?(\\[a-zA-Z0-9_.-]+)+\\?",
             message = "The xml filepath must be like pattern 'some/path/to/file.xml'")
     @Value(value = "opc-ua-spring-client.xml-filepath")
     private String xmlFilepath;

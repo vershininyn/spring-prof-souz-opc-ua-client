@@ -1,4 +1,4 @@
-const check_port_host = (wssHost, wssPort) => {
+const check_port_host_xml_filepath = (wssHost, wssPort, xmlFilepath) => {
     /*
         checkWssHost
         checkWssPort
@@ -20,34 +20,53 @@ const check_port_host = (wssHost, wssPort) => {
         return wssPort.match(ipv4_port_regexp) != null;
     }
 
+    const checkXmlFilepath = (xmlFilepath) => {
+        const xml_filepath_regexp = /^.*\.xml$/;
+
+        return xmlFilepath.match(xml_filepath_regexp) != null;
+    }
+
     const wssHostIsOk = () => {
-        return;
+        return true;
     }
 
     // checkWssHost
     const wssHostIsWrong = () => {
-        $('#verify-host-and-port-and-xml').text("Wss host is unacceptable. Please check by pattern '0.0.0.0'.");
+        $('#verify-host-and-port-and-xml').text("Wss host is unacceptable. Please enter the value manually following the pattern '0.0.0.0'.");
         $('.ui.modal').modal({blurring: true}).modal('show');
 
-        return;
+        return false;
     }
 
     const wssPortIsOk = () => {
-        return;
+        return true;
     }
 
     const wssPortIsWrong = () => {
-        $('#verify-host-and-port-and-xml').text("Wss port is unacceptable. Please check by pattern '1234'.");
+        $('#verify-host-and-port-and-xml').text("Wss port is unacceptable. Please enter the value manually following the pattern '1234'.");
         $('.ui.modal').modal({blurring: true}).modal('show');
 
-        return;
+        return false;
     }
 
-    const wssHostEmptyResult = checkWssHost(wssHost) ? wssHostIsOk() : wssHostIsWrong();
+    const xmlFilepathIsOk = () => {
+        return true;
+    }
 
-    const wssPortEmptyResult = checkWssPort(wssPort) ? wssPortIsOk() : wssPortIsWrong();
+    const xmlFilepathIsWrong = () => {
+        $('#verify-host-and-port-and-xml').text("Xml filepath is unacceptable. Please enter the value manually following the pattern '*.xml'.");
+        $('.ui.modal').modal({blurring: true}).modal('show');
 
-    return;
+        return false;
+    }
+
+    const wssHostResult = checkWssHost(wssHost) ? wssHostIsOk() : wssHostIsWrong();
+
+    const wssPortResult = checkWssPort(wssPort) ? wssPortIsOk() : wssPortIsWrong();
+
+    const xmlFilepathResult = checkXmlFilepath(xmlFilepath) ? xmlFilepathIsOk() : xmlFilepathIsWrong();
+
+    return wssHostResult && wssPortResult && xmlFilepathResult;
 }
 
 var items = [
@@ -74,13 +93,62 @@ var items = [
                          parentId: 1,
                          value: 'reacttreetable@simple.com'
                      }];
-
 $(() => {
-    $("#connect-button" ).on("click", () => {
-        let wssPort = $('#wss-port').val();
-        let wssHost = $('#wss-host').val();
+    $("#connect-disconnect-button" ).on("click", () => {
+        const connectionIsEstablished = () => {
+            let isConnected = $("#connect-disconnect-button" ).attr('isConnected');
 
-        check_port_host(wssHost, wssPort);
+            return isConnected === 'true';
+        }
+
+        const connectToServer = () => {
+            const changeConnectStateToDisconnect = () => {
+               $("#connect-disconnect-button" ).html('Disconnect');
+               $("#connect-disconnect-button" ).removeClass('green');
+               $("#connect-disconnect-button" ).addClass('red');
+
+               $("#connect-disconnect-button" ).attr('isConnected', 'true');
+
+                return true;
+            }
+
+            const actualConnectToServer = () => {
+                //connect to server
+
+                // change state of button
+                changeConnectStateToDisconnect();
+
+                return true;
+            }
+
+            const connectionBooleanResult = () => {
+                return false;
+            }
+
+            let wssPort = $('#wss-port').val();
+            let wssHost = $('#wss-host').val();
+            let xmlFilepath = $('#xml-filepath').val();
+
+            return check_port_host_xml_filepath(wssHost, wssPort, xmlFilepath) ? actualConnectToServer() : connectionBooleanResult();
+        }
+
+        const disconnectFromServer = () => {
+            const changeDisconnectStateToConnect = () => {
+              $("#connect-disconnect-button" ).html('Connect');
+              $("#connect-disconnect-button" ).removeClass('red');
+              $("#connect-disconnect-button" ).addClass('green');
+
+              $("#connect-disconnect-button" ).attr('isConnected', 'false');
+
+              return true;
+            }
+
+            changeDisconnectStateToConnect();
+
+            return true;
+        }
+
+        return connectionIsEstablished() ? disconnectFromServer() : connectToServer();
     });
 
     function flatListToTree(items) {
