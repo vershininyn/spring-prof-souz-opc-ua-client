@@ -20,7 +20,7 @@ msg = {
       'MessageType':'READ_REQUEST',
       'ClientHandle':'1'
     },
-    'Body': { 'Variable' : 'Boolean'}
+    'Body': { 'Variable' : 'UInt32'}
  }
 
 send_json(ws, msg, 'FIRST_READ_REUEST')
@@ -31,7 +31,7 @@ msg = {
     'MessageType': 'WRITE_REQUEST'
    },
    'Body': {
-     'Variable': 'Int32Test',
+     'Variable': 'UInt32',
      'Value': {
        'Value': {
          'Body': '555',
@@ -48,7 +48,7 @@ msg = {
       'MessageType':'READ_REQUEST',
       'ClientHandle':'1'
     },
-    'Body': { 'Variable' : 'Boolean'}
+    'Body': { 'Variable' : 'UInt32'}
  }
 
 send_json(ws, msg, 'SECOND_WRITE_REQUEST')

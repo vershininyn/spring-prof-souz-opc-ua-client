@@ -50,9 +50,7 @@
   </WebSocketServer>
   	
   <OpcUaClient>
-  	<ClientConfigFile>@CONF_DIR@/OpcUaClient0.xml</ClientConfigFile>
-  	<ClientConfigFile>@CONF_DIR@/OpcUaClient1.xml</ClientConfigFile>
-  	<ClientConfigFile>@CONF_DIR@/OpcUaClientTest.xml</ClientConfigFile>
+  	<ClientConfigFile>@CONF_DIR@/OpcUaClient.xml</ClientConfigFile>
   </OpcUaClient>
   
   <WebGateway>

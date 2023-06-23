@@ -10,33 +10,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(
         produces = "application/json",
-        value = "/opc-ua-api")
+        value = "/opc-ua-ws-api")
 public class OpcUaRestApiController {
-    //@Autowired
-    //private OpcUaWebSocketService webSocketService;
-
-    private final OpcUaFileSystemService fsService;
-
     @Autowired
-    public OpcUaRestApiController(OpcUaFileSystemService fsService) {
-        this.fsService = fsService;
-    }
-
-    @Tag(name = "", description = "")
-    @PostMapping(value = "/connect")
-    public ResponseEntity<HttpStatus> connectToASNeGServer() {
-        if (!fsService.xmlFileIsExists() && !fsService.createXmlFile()) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.ordinal()).build();
-        }
-
-        return ResponseEntity.ok().build();
-    }
-
-    @Tag(name = "", description = "")
-    @PostMapping(value = "/disconnect")
-    public ResponseEntity<HttpStatus> disconnectFromASNeGServer() {
-        return null;
-    }
+    private OpcUaFileSystemService fsService;
 
     @Tag(name = "", description = "")
     @GetMapping(value = "/getValuesInfo")
