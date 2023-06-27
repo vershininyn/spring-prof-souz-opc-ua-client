@@ -43,14 +43,12 @@ public class OpcUaFileSystemControllerTests {
     public void createXmlFileTemplate_andCheckItIsSuccessful(String xmlFilename) throws Exception {
         String xmlFilepath = joinTemporalDirectoryAndXmlFilename(xmlFilename);
 
-        //TODO: it's will be finished tomorrow
-
-        /*mockMvc.perform(MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                         .post("/createXmlFile")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(xmlFilepath)))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isCreated());*/
+                .andExpect(status().isCreated());
     }
 
     private String joinTemporalDirectoryAndXmlFilename(String xmlFilename)
