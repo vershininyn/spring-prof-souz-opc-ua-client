@@ -113,6 +113,63 @@ public class OpcUaFileSystemControllerTests {
                 .andExpect(jsonPath("$.timestamp", isA(Long.class)));
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = "template.xml")
+    public void deleteXmlFileTemplate_andUseCorrectData_andCheckItIsSuccessfulHandled(String xmlFilename) throws Exception {
+        String xmlFilepath = joinTemporalDirectoryAndXmlFilename(xmlFilename);
+
+        UUID xmlUUID = UUID.randomUUID();
+
+        XmlFilepathDTO responseDTO = XmlFilepathDTO.builder()
+                .xmlUUID(xmlUUID)
+                .isExists(true)
+                .xmlFilepath(xmlFilepath)
+                .xmlFilename(xmlFilename)
+                .build();
+
+        Mockito.when(fsService.createXmlFile(xmlFilepath)).thenReturn(responseDTO);
+
+        XmlFilepathRequestDTO requestDTO = new XmlFilepathRequestDTO(xmlFilepath);
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/opc-ua-fs-api/createXmlFile")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDTO));
+
+        mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.xmlFilename", is(xmlFilename)))
+                .andExpect(jsonPath("$.xmlFilepath", is(xmlFilepath)))
+                .andExpect(jsonPath("$.xmlUUID", is(xmlUUID.toString())))
+                .andExpect(jsonPath("$.isExists", is(true)));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = " ")
+    public void createXmlFileTemplate_andUseIncorrectData_andCheckItIsSuccessfulHandled(String xmlFilename) throws Exception {
+        String xmlFilepath = joinTemporalDirectoryAndXmlFilename(xmlFilename),
+                ioExceptionMessage = "Unacceptable xml file path";
+
+        Mockito.when(fsService.createXmlFile(xmlFilepath)).thenThrow(new IOException(ioExceptionMessage));
+
+        XmlFilepathRequestDTO requestDTO = new XmlFilepathRequestDTO(xmlFilepath);
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/opc-ua-fs-api/createXmlFile")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDTO));
+
+        mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().is5xxServerError())
+                .andExpect(jsonPath("$.statusCode", is(HttpStatus.INTERNAL_SERVER_ERROR.value())))
+                .andExpect(jsonPath("$.message", is(ioExceptionMessage)))
+                .andExpect(jsonPath("$.timestamp", isA(Long.class)));
+    }
+
     private String joinTemporalDirectoryAndXmlFilename(String xmlFilename) {
         String fileSeparator = System.getProperty("file.separator");
 
