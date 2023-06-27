@@ -2,8 +2,6 @@ package dev.projects.profsouz.opcuaclient.domain.response;
 
 import lombok.*;
 
-import java.util.Date;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -12,5 +10,5 @@ import java.util.Date;
 public class OpcUaErrorMessage {
     private int statusCode;
     private String message;
-    private Date timestamp;
+    private long timestamp;
 }
