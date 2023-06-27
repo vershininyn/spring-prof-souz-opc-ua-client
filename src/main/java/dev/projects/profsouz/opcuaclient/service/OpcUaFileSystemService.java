@@ -10,30 +10,22 @@ import java.nio.file.Path;
 
 @Service
 public class OpcUaFileSystemService {
-    public XmlFilepathDTO createXmlFile(String xmlPath) {
+    public XmlFilepathDTO createXmlFile(String xmlPath) throws IOException {
         Path xmlFilepath = Path.of(xmlPath);
 
-        try {
-            if (!Files.exists(xmlFilepath)) {
-                Files.createFile(xmlFilepath);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (!Files.exists(xmlFilepath)) {
+            Files.createFile(xmlFilepath);
         }
 
         return OpcUaFileSystemObjectMapper.mapFromStringToXmlFilepathDTO(xmlPath);
 
     }
 
-    public XmlFilepathDTO deleteXmlFile(String xmlPath) {
+    public XmlFilepathDTO deleteXmlFile(String xmlPath) throws IOException {
         Path xmlFilepath = Path.of(xmlPath);
 
-        try {
-            if (Files.exists(xmlFilepath)) {
-                Files.delete(xmlFilepath);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (Files.exists(xmlFilepath)) {
+            Files.delete(xmlFilepath);
         }
 
         return OpcUaFileSystemObjectMapper.mapFromStringToXmlFilepathDTO(xmlPath);

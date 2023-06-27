@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class IndexController {
 
-    @Tag(name = "It is the controller for main page", description = "Main page REST API method")
+    @Tag(name = "It is the controller for main page", description = "Main page")
     @GetMapping(value = "/")
     public ModelAndView getDefaultData() {
         ModelAndView mv = new ModelAndView();
