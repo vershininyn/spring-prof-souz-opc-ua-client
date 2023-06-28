@@ -5,11 +5,12 @@ import dev.projects.profsouz.opcuaclient.controller.OpcUaFileSystemController;
 import dev.projects.profsouz.opcuaclient.controller.OpcUaUniversalControllerAdvice;
 import dev.projects.profsouz.opcuaclient.domain.XmlFilepathDTO;
 import dev.projects.profsouz.opcuaclient.domain.request.XmlFilepathRequestDTO;
+import dev.projects.profsouz.opcuaclient.repository.OpcUaFileSystemJpaRepository;
 import dev.projects.profsouz.opcuaclient.service.OpcUaFileSystemService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mockito;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -23,7 +24,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import java.io.IOException;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -44,6 +44,9 @@ public class OpcUaFileSystemControllerTests {
     private MockMvc mockMvc;
 
     private static String temporalXmlFileDirectory = "";
+
+    @InjectMocks
+    private OpcUaFileSystemJpaRepository fsJpaRepository;
 
     @MockBean
     private OpcUaFileSystemService fsService;
@@ -70,7 +73,7 @@ public class OpcUaFileSystemControllerTests {
                 .xmlFilename(xmlFilename)
                 .build();
 
-        Mockito.when(fsService.createXmlFile(xmlFilepath)).thenReturn(responseDTO);
+        //Mockito.when(fsService.createXmlFile(xmlFilepath)).thenReturn(responseDTO);
 
         XmlFilepathRequestDTO requestDTO = new XmlFilepathRequestDTO(xmlFilepath);
 
@@ -95,7 +98,7 @@ public class OpcUaFileSystemControllerTests {
         String xmlFilepath = joinTemporalDirectoryAndXmlFilename(xmlFilename),
                 ioExceptionMessage = "Unacceptable xml file path";
 
-        Mockito.when(fsService.createXmlFile(xmlFilepath)).thenThrow(new IOException(ioExceptionMessage));
+        //Mockito.when(fsService.createXmlFile(xmlFilepath)).thenThrow(new IOException(ioExceptionMessage));
 
         XmlFilepathRequestDTO requestDTO = new XmlFilepathRequestDTO(xmlFilepath);
 
@@ -122,42 +125,42 @@ public class OpcUaFileSystemControllerTests {
 
         XmlFilepathDTO responseDTO = XmlFilepathDTO.builder()
                 .xmlUUID(xmlUUID)
-                .isExists(true)
+                .isExists(false)
                 .xmlFilepath(xmlFilepath)
                 .xmlFilename(xmlFilename)
                 .build();
 
-        Mockito.when(fsService.createXmlFile(xmlFilepath)).thenReturn(responseDTO);
+        //Mockito.when(fsService.deleteXmlFile(xmlFilepath)).thenReturn(responseDTO);
 
         XmlFilepathRequestDTO requestDTO = new XmlFilepathRequestDTO(xmlFilepath);
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/opc-ua-fs-api/createXmlFile")
+                .delete("/opc-ua-fs-api/deleteXmlFile")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO));
 
         mockMvc.perform(requestBuilder)
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isCreated())
+                .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.xmlFilename", is(xmlFilename)))
                 .andExpect(jsonPath("$.xmlFilepath", is(xmlFilepath)))
                 .andExpect(jsonPath("$.xmlUUID", is(xmlUUID.toString())))
-                .andExpect(jsonPath("$.isExists", is(true)));
+                .andExpect(jsonPath("$.isExists", is(false)));
     }
 
     @ParameterizedTest
     @ValueSource(strings = " ")
-    public void createXmlFileTemplate_andUseIncorrectData_andCheckItIsSuccessfulHandled(String xmlFilename) throws Exception {
+    public void deleteXmlFileTemplate_andUseIncorrectData_andCheckItIsSuccessfulHandled(String xmlFilename) throws Exception {
         String xmlFilepath = joinTemporalDirectoryAndXmlFilename(xmlFilename),
                 ioExceptionMessage = "Unacceptable xml file path";
 
-        Mockito.when(fsService.createXmlFile(xmlFilepath)).thenThrow(new IOException(ioExceptionMessage));
+        //Mockito.when(fsService.createXmlFile(xmlFilepath)).thenThrow(new IOException(ioExceptionMessage));
 
         XmlFilepathRequestDTO requestDTO = new XmlFilepathRequestDTO(xmlFilepath);
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/opc-ua-fs-api/createXmlFile")
+                .delete("/opc-ua-fs-api/deleteXmlFile")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO));
