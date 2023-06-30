@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.UUID;
 
 @RestController
 @RequestMapping(
@@ -31,13 +30,13 @@ public class OpcUaFileSystemController {
     public ResponseEntity<XmlFilepathDTO> createTemplateXmlFile(@RequestBody XmlFilepathRequestDTO xmlFilepathRequestDTO) throws IOException {
         XmlFilepathDTO xmlFilepathDTO = fsService.createXmlFile(xmlFilepathRequestDTO.getXmlFilepath());
 
-        return ResponseEntity.created(URI.create("/"+xmlFilepathDTO.getXmlUUID())).body(xmlFilepathDTO);
+        return ResponseEntity.created(URI.create("/"+xmlFilepathDTO.getId())).body(xmlFilepathDTO);
     }
 
     @Tag(name = "It's the delete xml file endpoint", description = "Delete xml file if it is exists")
-    @DeleteMapping(value = "/deleteXmlFile/{fileUUID}")
-    public ResponseEntity<XmlFilepathDTO> deleteTemplateXmlFile(@PathVariable UUID xmlFileUUID) throws IOException {
-        XmlFilepathDTO xmlFilepathDTO = fsService.deleteXmlFile(xmlFileUUID);
+    @DeleteMapping(value = "/deleteXmlFile/{xmlFileId}")
+    public ResponseEntity<XmlFilepathDTO> deleteTemplateXmlFile(@PathVariable("xmlFileId") Long xmlFileId) throws IOException {
+        XmlFilepathDTO xmlFilepathDTO = fsService.deleteXmlFile(xmlFileId);
 
         //TODO handle other branches of alg
 

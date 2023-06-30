@@ -1,79 +1,64 @@
 package dev.projects.profsouz.opcuaclient.modules;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.projects.profsouz.opcuaclient.controller.OpcUaFileSystemController;
-import dev.projects.profsouz.opcuaclient.controller.OpcUaUniversalControllerAdvice;
-import dev.projects.profsouz.opcuaclient.domain.XmlFilepathDTO;
 import dev.projects.profsouz.opcuaclient.domain.request.XmlFilepathRequestDTO;
-import dev.projects.profsouz.opcuaclient.repository.OpcUaFileSystemJpaRepository;
 import dev.projects.profsouz.opcuaclient.service.OpcUaFileSystemService;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.StringJoiner;
-import java.util.UUID;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isA;
+import static org.hamcrest.Matchers.*;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = OpcUaFileSystemController.class)
+@SpringBootTest
 @AutoConfigureMockMvc
-@ContextConfiguration(classes = {
-        OpcUaFileSystemController.class,
-        OpcUaUniversalControllerAdvice.class
-})
 @ActiveProfiles(profiles = {"test"})
+@Transactional(isolation = Isolation.REPEATABLE_READ)
 public class OpcUaFileSystemControllerTests {
+    private final static String templateFilename = "template.xml", temporalXmlFileDirectory = System.getProperty("user.home");
+
     @Autowired
     private MockMvc mockMvc;
 
-    private static String temporalXmlFileDirectory = "";
-
-    @InjectMocks
-    private OpcUaFileSystemJpaRepository fsJpaRepository;
-
-    @MockBean
+    @Autowired
     private OpcUaFileSystemService fsService;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    @BeforeAll
-    public static void setUpTests() {
-        temporalXmlFileDirectory = System.getProperty("user.home");
+    @BeforeEach
+    public void setUp() throws IOException {
+        Files.deleteIfExists(Path.of(joinTemporalDirectoryAndXmlFilename(templateFilename)));
     }
 
     @ParameterizedTest
-    @ValueSource(strings = "template.xml")
-    public void createXmlFileTemplate_andUseCorrectData_andCheckItIsSuccessfulHandled(String xmlFilename) throws Exception {
-        String xmlFilepath = joinTemporalDirectoryAndXmlFilename(xmlFilename);
-
-        UUID xmlUUID = UUID.randomUUID();
-
-        XmlFilepathDTO responseDTO = XmlFilepathDTO.builder()
-                .xmlUUID(xmlUUID)
-                .isExists(true)
-                .xmlFilepath(xmlFilepath)
-                .xmlFilename(xmlFilename)
-                .build();
-
-        //Mockito.when(fsService.createXmlFile(xmlFilepath)).thenReturn(responseDTO);
+    @ValueSource(strings = templateFilename)
+    @SqlGroup({
+            @Sql(value = "classpath:empty-h2.sql", executionPhase = BEFORE_TEST_METHOD)
+    })
+    public void createXmlFileTemplate_andUseCorrectData_andCheckItIsSuccessfulHandled(String xmlTemplateFilename) throws Exception {
+        String xmlFilepath = joinTemporalDirectoryAndXmlFilename(xmlTemplateFilename);
 
         XmlFilepathRequestDTO requestDTO = new XmlFilepathRequestDTO(xmlFilepath);
 
@@ -86,19 +71,21 @@ public class OpcUaFileSystemControllerTests {
         mockMvc.perform(requestBuilder)
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.xmlFilename", is(xmlFilename)))
+                .andExpect(jsonPath("$").isMap())
+                .andExpect(jsonPath("$", aMapWithSize(4)))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.xmlFilename", is(xmlTemplateFilename)))
                 .andExpect(jsonPath("$.xmlFilepath", is(xmlFilepath)))
-                .andExpect(jsonPath("$.xmlUUID", is(xmlUUID.toString())))
                 .andExpect(jsonPath("$.isExists", is(true)));
     }
 
     @ParameterizedTest
-    @ValueSource(strings = " ")
+    @ValueSource(strings = "  ")
+    @SqlGroup({
+            @Sql(value = "classpath:empty-h2.sql", executionPhase = BEFORE_TEST_METHOD)
+    })
     public void createXmlFileTemplate_andUseIncorrectData_andCheckItIsSuccessfulHandled(String xmlFilename) throws Exception {
-        String xmlFilepath = joinTemporalDirectoryAndXmlFilename(xmlFilename),
-                ioExceptionMessage = "Unacceptable xml file path";
-
-        //Mockito.when(fsService.createXmlFile(xmlFilepath)).thenThrow(new IOException(ioExceptionMessage));
+        String xmlFilepath = joinTemporalDirectoryAndXmlFilename(xmlFilename);
 
         XmlFilepathRequestDTO requestDTO = new XmlFilepathRequestDTO(xmlFilepath);
 
@@ -111,74 +98,68 @@ public class OpcUaFileSystemControllerTests {
         mockMvc.perform(requestBuilder)
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().is5xxServerError())
+                .andExpect(jsonPath("$").isMap())
+                .andExpect(jsonPath("$", aMapWithSize(3)))
                 .andExpect(jsonPath("$.statusCode", is(HttpStatus.INTERNAL_SERVER_ERROR.value())))
-                .andExpect(jsonPath("$.message", is(ioExceptionMessage)))
+                .andExpect(jsonPath("$.message", isA(String.class)))
                 .andExpect(jsonPath("$.timestamp", isA(Long.class)));
     }
 
     @ParameterizedTest
-    @ValueSource(strings = "template.xml")
-    public void deleteXmlFileTemplate_andUseCorrectData_andCheckItIsSuccessfulHandled(String xmlFilename) throws Exception {
-        String xmlFilepath = joinTemporalDirectoryAndXmlFilename(xmlFilename);
+    @ValueSource(longs = 1L)
+    @SqlGroup({
+            @Sql(value = "classpath:empty-h2.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "classpath:data-h2.sql", executionPhase = BEFORE_TEST_METHOD)
+    })
+    public void deleteXmlFileTemplate_andUseCorrectData_andCheckItIsSuccessfulHandled(Long existingId) throws Exception {
+        String xmlFilepath = joinTemporalDirectoryAndXmlFilename(templateFilename);
 
-        UUID xmlUUID = UUID.randomUUID();
-
-        XmlFilepathDTO responseDTO = XmlFilepathDTO.builder()
-                .xmlUUID(xmlUUID)
-                .isExists(false)
-                .xmlFilepath(xmlFilepath)
-                .xmlFilename(xmlFilename)
-                .build();
-
-        //Mockito.when(fsService.deleteXmlFile(xmlFilepath)).thenReturn(responseDTO);
-
-        XmlFilepathRequestDTO requestDTO = new XmlFilepathRequestDTO(xmlFilepath);
+        Files.createFile(Path.of(xmlFilepath));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .delete("/opc-ua-fs-api/deleteXmlFile")
+                .delete("/opc-ua-fs-api/deleteXmlFile/" + existingId.toString())
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDTO));
+                .accept(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(requestBuilder)
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$.xmlFilename", is(xmlFilename)))
+                .andExpect(jsonPath("$").isMap())
+                .andExpect(jsonPath("$", aMapWithSize(4)))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.xmlFilename", is(templateFilename)))
                 .andExpect(jsonPath("$.xmlFilepath", is(xmlFilepath)))
-                .andExpect(jsonPath("$.xmlUUID", is(xmlUUID.toString())))
                 .andExpect(jsonPath("$.isExists", is(false)));
     }
 
     @ParameterizedTest
-    @ValueSource(strings = " ")
-    public void deleteXmlFileTemplate_andUseIncorrectData_andCheckItIsSuccessfulHandled(String xmlFilename) throws Exception {
-        String xmlFilepath = joinTemporalDirectoryAndXmlFilename(xmlFilename),
-                ioExceptionMessage = "Unacceptable xml file path";
-
-        //Mockito.when(fsService.createXmlFile(xmlFilepath)).thenThrow(new IOException(ioExceptionMessage));
-
-        XmlFilepathRequestDTO requestDTO = new XmlFilepathRequestDTO(xmlFilepath);
-
+    @ValueSource(longs = 2L)
+    @SqlGroup({
+            @Sql(value = "classpath:empty-h2.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "classpath:data-h2.sql", executionPhase = BEFORE_TEST_METHOD)
+    })
+    public void deleteXmlFileTemplate_andUseIncorrectData_andCheckItIsSuccessfulHandled(Long notExistingId) throws Exception {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .delete("/opc-ua-fs-api/deleteXmlFile")
+                .delete("/opc-ua-fs-api/deleteXmlFile/" + notExistingId.toString())
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDTO));
+                .accept(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(requestBuilder)
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().is5xxServerError())
+                .andExpect(jsonPath("$").isMap())
+                .andExpect(jsonPath("$", aMapWithSize(3)))
                 .andExpect(jsonPath("$.statusCode", is(HttpStatus.INTERNAL_SERVER_ERROR.value())))
-                .andExpect(jsonPath("$.message", is(ioExceptionMessage)))
+                .andExpect(jsonPath("$.message", isA(String.class)))
                 .andExpect(jsonPath("$.timestamp", isA(Long.class)));
     }
 
-    private String joinTemporalDirectoryAndXmlFilename(String xmlFilename) {
+    private static String joinTemporalDirectoryAndXmlFilename(String templateXmlFilename) {
         String fileSeparator = System.getProperty("file.separator");
 
         return (new StringJoiner(fileSeparator, "", ""))
                 .add(temporalXmlFileDirectory)
-                .add(xmlFilename)
+                .add(templateXmlFilename)
                 .toString();
     }
 }
