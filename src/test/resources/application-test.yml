@@ -30,6 +30,10 @@ spring:
     generate-ddl: true
     defer-datasource-initialization: true
 
+local:
+  server:
+    port: 1024
+
 logging:
   level:
     org:

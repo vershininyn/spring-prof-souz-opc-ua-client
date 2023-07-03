@@ -30,12 +30,18 @@ def hibernateValidatorVersion = '8.0.0.Final'
 def springWebSocketVersion = '6.0.10'
 def springMessagingVersion = '6.0.10'
 def hibernateCoreVersion = '6.2.5.Final'
+def slf4jVersion = '2.0.7'
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+
+	// https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+	//implementation "org.slf4j:slf4j-api:${slf4jVersion}"
 
 	// https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
 	implementation "org.hibernate.orm:hibernate-core:${hibernateCoreVersion}"

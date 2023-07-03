@@ -1,4 +1,4 @@
-package dev.projects.profsouz.opcuaclient.modules;
+package dev.projects.profsouz.opcuaclient.unit;
 
 import dev.projects.profsouz.opcuaclient.controller.IndexController;
 import org.junit.jupiter.api.Test;

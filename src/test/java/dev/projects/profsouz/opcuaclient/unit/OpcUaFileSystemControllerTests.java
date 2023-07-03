@@ -1,4 +1,4 @@
-package dev.projects.profsouz.opcuaclient.modules;
+package dev.projects.profsouz.opcuaclient.unit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.projects.profsouz.opcuaclient.domain.request.XmlFilepathRequestDTO;
