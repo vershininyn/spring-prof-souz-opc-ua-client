@@ -9,7 +9,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Setter
 @Getter
-public class WssMetaInfoResponseDTO {
+public class WsMetaInfoResponseDTO {
     private String wsHost, wsPort;
     private Boolean isConnected;
     private UUID connectionUUID;

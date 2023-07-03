@@ -1,13 +1,10 @@
 package dev.projects.profsouz.opcuaclient.controller;
 
-import dev.projects.profsouz.opcuaclient.domain.request.WssMetaInfoRequestDTO;
-import dev.projects.profsouz.opcuaclient.domain.response.WssMetaInfoResponseDTO;
-import jakarta.annotation.PreDestroy;
-import lombok.Getter;
+import dev.projects.profsouz.opcuaclient.domain.request.WsMetaInfoRequestDTO;
+import dev.projects.profsouz.opcuaclient.domain.response.WsMetaInfoResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -24,9 +21,12 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
+
+import static dev.projects.profsouz.opcuaclient.utils.OpcUaWsMetaInfoDTOMapper.mapWsMetaInfoToResponseDTO;
+import static dev.projects.profsouz.opcuaclient.utils.OpcUaWsStompCheckUtil.checkWsHostAndPort;
+import static dev.projects.profsouz.opcuaclient.utils.OpcUaWsStompCheckUtil.createWsURLFromHostAndPort;
 
 @Slf4j
 @Controller
@@ -40,33 +40,42 @@ public class OpcUaStompClientController implements StompSessionHandler {
     SocketProperties socketProperties; // TODO: Either implement this properties Bean or use hard-coded values
      */
 
-    @Value("${stomp.socket.url}")
-    private String connectionUrl;
-
     StompSession stompSession = null;
 
     /**
      * Map of subscriptions.
-     */
+
     @Getter
-    Map<String, StompSession.Subscription> subscriptions = new HashMap<>();
+    Map<String, StompSession.Subscription> subscriptions = new HashMap<>();*/
 
     @PutMapping(value = "/connectToASNeGServer")
-    public ResponseEntity<WssMetaInfoResponseDTO> connectToASNeGServer(@RequestBody WssMetaInfoRequestDTO requestDTO) throws Exception {
+    public ResponseEntity<WsMetaInfoResponseDTO> connectToASNeGServer(@RequestBody WsMetaInfoRequestDTO requestDTO) throws Exception {
+        checkWsHostAndPort(requestDTO.getWsHost(), requestDTO.getWsPort());
+
         WebSocketClient client = new StandardWebSocketClient();
         WebSocketStompClient stompClient = new WebSocketStompClient(client);
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
-        stompSession = stompClient.connect(connectionUrl, this).get();
+        String url = createWsURLFromHostAndPort(requestDTO.getWsHost(), requestDTO.getWsPort());
 
-        UUID uuid = UUID.randomUUID();
+        stompSession = stompClient.connect(url, this).get();
 
-        WssMetaInfoResponseDTO responseDTO = WssMetaInfoResponseDTO.builder()
-                .isConnected(stompSession.isConnected())
-                .wsHost(requestDTO.getWsHost())
-                .wsPort(requestDTO.getWsPort())
-                .connectionUUID(uuid)
-                .build();
+        WsMetaInfoResponseDTO responseDTO = mapWsMetaInfoToResponseDTO(UUID.randomUUID(),
+                stompSession.isConnected(),
+                requestDTO.getWsHost(),
+                requestDTO.getWsPort());
+
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @PutMapping(value = "/disconnectFromASNeGServer")
+    public ResponseEntity<WsMetaInfoResponseDTO> disconnectFromASNeGServer(@RequestBody WsMetaInfoRequestDTO requestDTO) throws Exception {
+        Objects.requireNonNull(stompSession, "Unacceptable stompSession. It's the null.");
+
+        WsMetaInfoResponseDTO responseDTO = mapWsMetaInfoToResponseDTO(UUID.randomUUID(),
+                stompSession.isConnected(),
+                requestDTO.getWsHost(),
+                requestDTO.getWsPort());
 
         return ResponseEntity.ok(responseDTO);
     }
@@ -89,22 +98,22 @@ public class OpcUaStompClientController implements StompSessionHandler {
         // TODO: Check subscriptions if already exist and is subscribed.
         log.info("Subscribing to room: {}", roomId);
         StompSession.Subscription subscription = stompSession.subscribe("/channel/" + roomId, this);
-        subscriptions.put(roomId, subscription);
+        //subscriptions.put(roomId, subscription);
     }
 
     public boolean isSubscribed(String roomId) {
-        return subscriptions
-                .containsKey(roomId);
+       /* return subscriptions
+                .containsKey(roomId);*/
+
+        return false;
     }
 
     public void unsubscribe(String roomId) {
-        subscriptions
+        /*subscriptions
                 .get(roomId))
                 .unsubscribe();
-        subscriptions.remove(roomId);
+        subscriptions.remove(roomId);*/
     }
-
-    /* --- StompSessionHandler methods --- */
 
     @Override
     public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
@@ -127,28 +136,29 @@ public class OpcUaStompClientController implements StompSessionHandler {
     public void handleTransportError(StompSession session, Throwable exception) {
         log.error("Retrieved a transport error: {}", session);
         exception.printStackTrace();
-        if (!session.isConnected()) {
+        /*if (!session.isConnected()) {
             subscriptions.clear();
-            connect();
-        }
+           // connect(); TODO: Connect to a new server.`
+        }*/
     }
 
     @Override
     public Type getPayloadType(StompHeaders headers) {
-        return StompMessage.class;
+       // return StompMessage.class;
+        return null;
     }
 
     @Override
     public void handleFrame(StompHeaders headers, Object payload) {
         log.info("Got a new message {}", payload);
-        StompMessage stompMessage = (StompMessage) payload;
+        //StompMessage stompMessage = (StompMessage) payload; TODO: Handle possible ClassCastExceptions or different payload classes.
         // TODO: Consume the message, handle possible ClassCastExceptions or different payload classes.
     }
 
     /**
      * Unsubscribe and close connection before destroying this instance (e.g. on application shutdown).
      */
-    @PreDestroy
+    /*@PreDestroy
     void onShutDown() {
         for (String key : subscriptions.keySet()) {
             subscriptions.get(key).unsubscribe();
@@ -157,5 +167,5 @@ public class OpcUaStompClientController implements StompSessionHandler {
         if (stompSession != null) {
             stompSession.disconnect();
         }
-    }
+    }*/
 }

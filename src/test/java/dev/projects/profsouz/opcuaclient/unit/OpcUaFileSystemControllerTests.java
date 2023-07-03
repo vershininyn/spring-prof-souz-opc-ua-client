@@ -63,7 +63,7 @@ public class OpcUaFileSystemControllerTests {
         XmlFilepathRequestDTO requestDTO = new XmlFilepathRequestDTO(xmlFilepath);
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/opc-ua-fs-api/createXmlFile")
+                .put("/opc-ua-fs-api/createXmlFile")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO));
@@ -90,7 +90,7 @@ public class OpcUaFileSystemControllerTests {
         XmlFilepathRequestDTO requestDTO = new XmlFilepathRequestDTO(xmlFilepath);
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/opc-ua-fs-api/createXmlFile")
+                .put ("/opc-ua-fs-api/createXmlFile")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO));

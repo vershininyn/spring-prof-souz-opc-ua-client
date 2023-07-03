@@ -1,10 +1,12 @@
 package dev.projects.profsouz.opcuaclient.domain.request;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class WssMetaInfoRequestDTO {
+@Builder
+@Setter
+@Getter
+public class WsMetaInfoRequestDTO {
     private String wsHost, wsPort;
 }

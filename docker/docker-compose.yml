@@ -7,7 +7,6 @@ networks:
       driver: default
       config:
         - subnet: "172.10.15.0/24"
-#          gateway: "192.168.0.1"
 
 services:
   asneg-demo:

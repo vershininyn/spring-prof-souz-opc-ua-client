@@ -26,7 +26,7 @@ public class OpcUaFileSystemController {
     private ObjectMapper objectMapper;
 
     @Tag(name = "It's the create xml file endpoint", description = "Create xml file if it is needed")
-    @PostMapping(value = "/createXmlFile")
+    @PutMapping(value = "/createXmlFile")
     public ResponseEntity<XmlFilepathDTO> createTemplateXmlFile(@RequestBody XmlFilepathRequestDTO xmlFilepathRequestDTO) throws IOException {
         XmlFilepathDTO xmlFilepathDTO = fsService.createXmlFile(xmlFilepathRequestDTO.getXmlFilepath());
 
