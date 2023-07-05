@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles(profiles = {"test"})
 @Transactional(isolation = Isolation.REPEATABLE_READ)
-public class OpcUaFileSystemControllerTests {
+public class OpcUaFileSystemControllerUnitTests {
     private final static String templateFilename = "template.xml", temporalXmlFileDirectory = System.getProperty("user.home");
 
     @Autowired

@@ -29,12 +29,7 @@ spring:
     show-sql: true
     generate-ddl: true
     defer-datasource-initialization: true
-  prof-souz:
-    docker-compose:
-      path: D:\dev-2023-06-26\dev\projects\java\spring-prof-souz-opc-ua-client\docker\docker-compose.yaml
-      asneg-demo:
-        first-port: 8889
-        second-port: 4840
+
 
 local:
   server:

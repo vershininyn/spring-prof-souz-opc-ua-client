@@ -10,7 +10,7 @@ networks:
 
 services:
   asneg-demo:
-    container_name: asneg-demo${BUILD_TAG}
+    #container_name: asneg-demo${BUILD_TAG}
     hostname: asneg-demo
     image: asneg/asneg-demo:release-4
     expose:
@@ -23,7 +23,7 @@ services:
         ipv4_address: 172.10.15.10
 
   webserver:
-    container_name: webserver${BUILD_TAG}
+    #container_name: webserver${BUILD_TAG}
     hostname: webserver
     depends_on:
       - asneg-demo
@@ -54,7 +54,7 @@ services:
         ipv4_address: 172.10.15.11
 
   test_client:
-    container_name: test_client${BUILD_TAG}
+    #container_name: test_client${BUILD_TAG}
     build:
       context: ../OpcUaWebServer
       dockerfile: ./OpcUaWebServer.Dockerfile
