@@ -1,0 +1,15 @@
+{
+  "auths": {
+    "https://index.docker.io/v2/": {
+      "username": "vyndocker",
+      "password": "*4HQv6zGa@ZEq4j&k7EH%^iS6",
+      "email": "vershininyn@yandex.ru"
+    }
+  },
+  "credsStore": "desktop",
+  "plugins": {
+    "-x-cli-hints": {
+      "enabled": "true"
+    }
+  }
+}

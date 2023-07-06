@@ -4,8 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.projects.profsouz.opcuaclient.controller.OpcUaStompClientController;
 import dev.projects.profsouz.opcuaclient.domain.request.WsMetaInfoRequestDTO;
 import org.hibernate.validator.constraints.UUID;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,10 +26,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles(profiles = {"test"})
-@Testcontainers/*(disabledWithoutDocker = true)*/
+@Testcontainers(disabledWithoutDocker = true)
 public class OpcUaWebSocketStompControllerIntegrationTests {
     @Autowired
     private MockMvc mockMvc;
@@ -41,19 +40,18 @@ public class OpcUaWebSocketStompControllerIntegrationTests {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private static String pathToDockerComposeYaml = "D:\\dev-2023-06-26\\dev\\projects\\java\\spring-prof-souz-opc-ua-client\\docker\\docker-compose.yml";
-
     @Container
-    private static DockerComposeContainer environment = new DockerComposeContainer(new File(pathToDockerComposeYaml))
+    private static DockerComposeContainer environment = new DockerComposeContainer(new File("src/test/resources/docker-compose-testcontainers.yml"))
             .withPull(true)
             .withExposedService("asneg-demo", 8889, Wait.forListeningPort())
             .withExposedService("webserver", 8081, Wait.forListeningPort())
-            .withExposedService("test_client", 19090, Wait.forListeningPort())
             .withLocalCompose(true);
 
-    @ParameterizedTest
-    @ValueSource(strings = {"172.10.15.11, 8081"})
-    public void connectToASNeGServer_usingCorrectData_andCorrectHandleIt_whenDisconnect(String host, String port) throws Exception {
+    @Test
+    public void connectToASNeGServer_usingCorrectData_andCorrectHandleIt_whenDisconnect() throws Exception {
+        String host = environment.getServiceHost("webserver", 8081),
+                port = String.valueOf(environment.getServicePort("webserver", 8081));
+
         WsMetaInfoRequestDTO requestDTO = WsMetaInfoRequestDTO.builder()
                 .wsHost(host)
                 .wsPort(port)

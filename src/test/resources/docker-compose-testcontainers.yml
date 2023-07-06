@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.9'
 
 networks:
   opc-ua-network:
@@ -10,7 +10,6 @@ networks:
 
 services:
   asneg-demo:
-    container_name: asneg-demo${BUILD_TAG}
     hostname: asneg-demo
     image: asneg/asneg-demo:release-4
     expose:
@@ -23,7 +22,6 @@ services:
         ipv4_address: 172.10.15.10
 
   webserver:
-    container_name: webserver${BUILD_TAG}
     hostname: webserver
     depends_on:
       - asneg-demo
@@ -36,7 +34,7 @@ services:
       - SERVER_PKI_ROOT_DIR=/tmp/
       - SSH_AUTH_SOCK=/ssh-agent
     build:
-      context: ../OpcUaWebServer
+      context: ../../../OpcUaWebServer
       dockerfile: ./OpcUaWebServer.Dockerfile
     volumes:
       - web_server_pki:/etc/OpcUaStack/OpcUaWebServer/pki
@@ -54,9 +52,8 @@ services:
         ipv4_address: 172.10.15.11
 
   test_client:
-    container_name: test_client${BUILD_TAG}
     build:
-      context: ../OpcUaWebServer
+      context: ../../../OpcUaWebServer
       dockerfile: ./OpcUaWebServer.Dockerfile
     depends_on:
       - asneg-demo
@@ -77,22 +74,6 @@ services:
     networks:
       opc-ua-network:
         ipv4_address: 172.10.15.12
-
-  #spring-opc-ua-client:
-  #  container_name: spring-opc-ua-client${BUILD_TAG}
-  #  build:
-  #    context: .
-  #    dockerfile: ./OpcUaSpringClient.Dockerfile
-  #  depends_on:
-  #   - asneg_demo
-  #   - webserver
-  # environment:
-  #   - xml-filepath: "/home/dev/projects/java/spring-prof-souz-opc-ua-client/template.xml"
-  #   - wss-host: 192.168.0.11
-  #   - wss-port: 8081
-  # networks:
-  #  opc-ua-network:
-  #     ipv4_address: 172.10.15.13
 
 volumes:
   demo_server_pki:
