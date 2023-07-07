@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
+import org.springframework.web.socket.sockjs.client.RestTemplateXhrTransport;
+import org.springframework.web.socket.sockjs.client.SockJsClient;
+import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -55,16 +58,7 @@ public class OpcUaStompClientController {
 
         //TODO: jetty web soekct client
 
-        WebSocketClient client = new StandardWebSocketClient();
-        WebSocketStompClient stompClient = new WebSocketStompClient(client);
-
-        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
-
-        String url = createWsURLFromHostAndPort(requestDTO.getWsHost(), requestDTO.getWsPort());
-
-        stompSession = stompClient.connectAsync(url, getStompSessionHandler()).get(60, TimeUnit.SECONDS);
-
-        /*SockJsClient sockJsClient = new SockJsClient(List.of(new WebSocketTransport(
+        SockJsClient sockJsClient = new SockJsClient(List.of(new WebSocketTransport(
                 new StandardWebSocketClient()),
                 new RestTemplateXhrTransport()));
 
@@ -73,7 +67,7 @@ public class OpcUaStompClientController {
 
         String url = createWsURLFromHostAndPort(requestDTO.getWsHost(), requestDTO.getWsPort());
 
-        stompSession = stompClient.connectAsync(url, getStompSessionHandler()).get(60, TimeUnit.SECONDS);*/
+        stompSession = stompClient.connectAsync(url, getStompSessionHandler()).get(180, TimeUnit.SECONDS);
 
         //TODO: ws://localhost:57382/info
 
