@@ -5,7 +5,6 @@ import dev.projects.profsouz.opcuaclient.domain.response.WsMetaInfoResponseDTO;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -15,21 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.WebSocketStompClient;
-import org.springframework.web.socket.sockjs.client.RestTemplateXhrTransport;
-import org.springframework.web.socket.sockjs.client.SockJsClient;
-import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import static dev.projects.profsouz.opcuaclient.utils.OpcUaWsMetaInfoDTOMapper.mapWsMetaInfoToResponseDTO;
 import static dev.projects.profsouz.opcuaclient.utils.OpcUaWsStompCheckUtil.checkWsHostAndPort;
-import static dev.projects.profsouz.opcuaclient.utils.OpcUaWsStompCheckUtil.createWsURLFromHostAndPort;
 
 @Slf4j
 @Controller
@@ -58,7 +49,7 @@ public class OpcUaStompClientController {
 
         //TODO: jetty web soekct client
 
-        SockJsClient sockJsClient = new SockJsClient(List.of(new WebSocketTransport(
+        /*SockJsClient sockJsClient = new SockJsClient(List.of(new WebSocketTransport(
                 new StandardWebSocketClient()),
                 new RestTemplateXhrTransport()));
 
@@ -67,7 +58,7 @@ public class OpcUaStompClientController {
 
         String url = createWsURLFromHostAndPort(requestDTO.getWsHost(), requestDTO.getWsPort());
 
-        stompSession = stompClient.connectAsync(url, getStompSessionHandler()).get(180, TimeUnit.SECONDS);
+        stompSession = stompClient.connectAsync(url, getStompSessionHandler()).get(180, TimeUnit.SECONDS);*/
 
         //TODO: ws://localhost:57382/info
 

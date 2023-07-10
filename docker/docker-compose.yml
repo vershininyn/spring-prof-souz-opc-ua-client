@@ -1,4 +1,4 @@
-version: '3.3'
+version: '2'
 
 networks:
   opc-ua-network:
@@ -12,6 +12,7 @@ services:
   asneg-demo:
     container_name: asneg-demo${BUILD_TAG}
     hostname: asneg-demo
+    restart: always
     image: asneg/asneg-demo:release-4
     expose:
       - "8889"
@@ -25,6 +26,7 @@ services:
   webserver:
     container_name: webserver${BUILD_TAG}
     hostname: webserver
+    restart: always
     depends_on:
       - asneg-demo
     expose:
@@ -43,8 +45,8 @@ services:
       - .:/code
     #command: >-
     #  bash -c "sed -i 's/0.0.0.0:8889/asneg-demo:8889/' /etc/OpcUaStack/OpcUaWebServer/OpcUaClient0.xml
-    #  && sed -i 's/0.0.0.0:8889/asneg-demo:8889/' /etc/OpcUaStack/OpcUaWebServer/OpcUaClient1.xml
-    #  && sed -i 's/0.0.0.0:8889/asneg-demo:8889/' /etc/OpcUaStack/OpcUaWebServer/OpcUaClientTest.xml
+    #  && sed -i 's/0.0.0.0:8889/asneg-demo:8889/' /etc/OpcUaStack/OpcUaWebServer/OpcUaClient1.xml.temporal
+    #  && sed -i 's/0.0.0.0:8889/asneg-demo:8889/' /etc/OpcUaStack/OpcUaWebServer/OpcUaClientTest.xml.temporal
     #  && OpcUaServer4 /etc/OpcUaStack/OpcUaWebServer/OpcUaServer.xml"
     command: >-
       bash -c "sed -i 's/0.0.0.0:8889/asneg-demo:8889/' /etc/OpcUaStack/OpcUaWebServer/OpcUaClient.xml
